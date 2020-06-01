@@ -1,0 +1,151 @@
+﻿<html>
+  <head>
+    <title>Little dots</title>
+  </head>
+  <body>
+    <div>
+      <h1>Little dots</h1>
+    </div>
+
+    <div id="b-dots-js"></div>
+  </body>
+
+<script type="text/javascript">    
+    var beJS = function(tag_id){
+      var canvas_el = document.querySelector('#'+tag_id+' > .bdevs-dots-canas-js');
+      this.beJS = {
+        canvas: {
+          el: canvas_el,
+          w: 300,
+          h: 150
+        },
+        speed : 10,
+        fn: {
+          interact: {},
+          modes: {},
+          vendors:{}
+        },
+        dots : [],
+        qtd : 50
+      }
+
+      var beJS = this.beJS;
+
+      beJS.fn.canvasInit = function(tag_id){
+        var beJS_tag = document.getElementById(tag_id),
+            beJS_canvas_class = 'bdevs-dots-canas-js',
+            exist_canvas = beJS_tag.getElementsByClassName(beJS_canvas_class);
+        var canvas_el = document.createElement('canvas');
+        canvas_el.className = beJS_canvas_class;
+        canvas_el.style.width = beJS.canvas.w + "px";
+        canvas_el.style.height = beJS.canvas.h + "px";
+        canvas_el.style.border = "1px solid";
+        /* append canvas */
+        var canvas = document.getElementById(tag_id).appendChild(canvas_el);
+        beJS.canvas.ctx = canvas.getContext('2d');
+			};
+
+      beJS.canvas.canvasClear = function(){
+        beJS.canvas.ctx.clearRect(0, 0, beJS.canvas.w, beJS.canvas.h);        
+      };
+
+    beJS.fn.dots = function(color,opacity,position,type){		
+        this.speed = 1;		
+        this.x = position.x;
+        this.y = 1//position.y;
+        this.dy = 1;//this.speed;
+        this.dx = 0;//this.speed;
+        this.color = color;
+        this.type = type;
+        this.radius = 5 //* Math.random();
+        this.angulo = 0;
+	}
+
+    beJS.fn.dots.prototype.move = function(){         
+        var dots = this;        
+            dots.x = dots.x + dots.dx + this.angulo;   
+            dots.y = dots.y + dots.dy;
+            dots.draw();
+            this.angulo = 0;
+            //console.log(dots.y);
+            var lucky = (parseInt(Math.random() * 2)) ? 1:-1;           
+                lucky = (parseInt(Math.random() * 2)) ? lucky: 0 ;    //inha reta;       
+            if(dots.x >= beJS.canvas.w) {
+                this.dx = -1;
+                this.dy = lucky;
+            }
+            if(dots.y>=beJS.canvas.h) {
+                this.dx = lucky;
+                this.dy = -1;
+                //this.speed = 0;
+                //this.angulo = -34;
+            }
+            if(dots.x<=0) {
+                this.dx = 1;
+                this.dy = lucky;
+            }
+            if(dots.y<=0) {
+               this.dx = lucky;
+               this.dy = 1;
+            }          
+      }
+
+      beJS.fn.dots.prototype.draw = function() {
+        beJS.canvas.ctx.beginPath();
+        var c = beJS.canvas;        
+        c.ctx.beginPath();
+        c.ctx.arc(this.x,this.y,this.radius,10, 20);
+        c.ctx.fillStyle = this.color;
+        c.ctx.fill();
+      }
+
+      beJS.fn.start = function(){
+        var qtd = beJS.qtd;
+        for(var i = 0; i <= qtd; i++){
+          var limitW = parseInt(Math.random() * beJS.canvas.w);
+          var limitH = parseInt(Math.random() * beJS.canvas.h);
+          beJS.dots.push(new beJS.fn.dots(get_color_random(),0.80,{x:limitH ,y: limitW }, 'circle'));
+        }
+        
+        var timeInterval = setInterval(() => {
+            beJS.canvas.canvasClear();
+            for (var i =  beJS.dots.length - 1; i >= 0; i--) beJS.dots[i].move();            
+        }, beJS.speed );
+      }
+      beJS.fn.canvasInit(tag_id);
+      beJS.fn.start();
+    }
+    beJS('b-dots-js');
+
+
+    function aleatorio(inferior,superior){
+      numPossibilidades = superior - inferior
+      aleat = Math.random() * numPossibilidades
+      aleat = Math.floor(aleat)
+      return parseInt(inferior) + aleat
+    }
+    hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
+    posarray = aleatorio(0,hexadecimal.length)
+    valor_hexadecimal_aleatorio = hexadecimal[posarray];
+    hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F")
+    cor_aleatoria = "#";
+    
+    for (i=0;i<6;i++){
+      posarray = aleatorio(0,hexadecimal.length)
+      cor_aleatoria += hexadecimal[posarray]
+    }
+
+    function get_color_random(){
+    hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F")
+    cor_aleatoria = "#";
+    for (i=0;i<6;i++){
+        posarray = aleatorio(0,hexadecimal.length)
+        cor_aleatoria += hexadecimal[posarray]
+    }
+
+    return cor_aleatoria
+}
+
+  </script>
+
+</html>
