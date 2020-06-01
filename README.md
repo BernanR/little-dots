@@ -1,5 +1,5 @@
 # My fun little dots
-Little dots porject 
+Little dots project 
 
 This project went created with javascrip and canvas html5.
 
