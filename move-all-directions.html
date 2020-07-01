@@ -26,7 +26,7 @@
           vendors:{}
         },
         dots : [],
-        qtd : 50
+        qtd : 30
       }
 
       var beJS = this.beJS;
@@ -50,43 +50,70 @@
       };
 
     beJS.fn.dots = function(color,opacity,position,type){		
-        this.speed = 1;		
-        this.x = position.x;
-        this.y = 1//position.y;
-        this.dy = 1;//this.speed;
+        this.id = beJS.dots.length + 1;
+        this.speed = 2;		
+        this.x = 5//position.x;
+        this.y = position.y;
+        /*
+          valores para os eixos 0.1 - 0.9
+          se eu zerar algum eixo, ele mantém em linha reta não importa o valor
+        */
+        this.dy = 0.9;
         this.dx = 0;//this.speed;
         this.color = color;
         this.type = type;
         this.radius = 5 //* Math.random();
-        this.angulo = 0;
-	}
+        this.angulo = 45;
+  }
+  
+  var ruturn_out = function(dots){
+    dots.dy = (dots.dy > 0) ? -1 : 1;
+    //dots.dx = (parseInt(Math.random() * 2)) ? 1:-1;
+  }
 
     beJS.fn.dots.prototype.move = function(){         
         var dots = this;        
-            dots.x = dots.x + dots.dx + this.angulo;   
-            dots.y = dots.y + dots.dy;
+            dots.x = dots.x + (dots.dx * this.speed);   
+            dots.y = dots.y + (dots.dy * this.speed);
             dots.draw();
-            this.angulo = 0;
-            //console.log(dots.y);
-            var lucky = (parseInt(Math.random() * 2)) ? 1:-1;           
-                lucky = (parseInt(Math.random() * 2)) ? lucky: 0 ;    //inha reta;       
-            if(dots.x >= beJS.canvas.w) {
-                this.dx = -1;
-                this.dy = lucky;
+            
+            for (var i =  beJS.dots.length - 1; i >= 0; i--){
+              if(beJS.dots[i].id != dots.id){
+                //console.log("y", dots.y +" : "+ beJS.dots[i].y)
+                let a = parseInt(beJS.dots[i].y - dots.y);
+                console.log(a)
+                if(a <= 5 || a >= - 5){
+                  console.log("y", dots.y +" : "+ beJS.dots[i].y)
+                  console.log("x", dots.x +" : "+ beJS.dots[i].x)
+                  //ruturn_out(dots)
+                } 
+                
+              }
             }
+            // console.log(dots.x)
+            // console.log(dots.y)
+            // this.angulo = 0;
+            // //console.log(this.speed)
+            // //console.log(dots.y);
+            // var lucky = (parseInt(Math.random() * 2)) ? 1:-1;           
+            //     lucky = (parseInt(Math.random() * 2)) ? lucky: 0 ;    //inha reta;       
+            // if(dots.x >= beJS.canvas.w) {
+            //     this.dx = -1;
+            //     this.dy = lucky;
+            // }
             if(dots.y>=beJS.canvas.h) {
-                this.dx = lucky;
-                this.dy = -1;
-                //this.speed = 0;
-                //this.angulo = -34;
+                //this.dx = 1;
+                this.dy = -0.7;
+                //this.speed = 2;                
+                
             }
-            if(dots.x<=0) {
-                this.dx = 1;
-                this.dy = lucky;
-            }
+            // if(dots.x<=0) {
+            //     this.dx = 1;
+            //     this.dy = lucky;
+            // }
             if(dots.y<=0) {
-               this.dx = lucky;
-               this.dy = 1;
+               //this.dx = lucky;
+               this.dy = 0.8;
             }          
       }
 
@@ -95,23 +122,39 @@
         var c = beJS.canvas;        
         c.ctx.beginPath();
         c.ctx.arc(this.x,this.y,this.radius,10, 20);
+       // c.ctx.translate(0,15.2);
         c.ctx.fillStyle = this.color;
         c.ctx.fill();
       }
 
       beJS.fn.start = function(){
-        var qtd = beJS.qtd;
-        for(var i = 0; i <= qtd; i++){
+        var qtd = 2;
+        for(var i = 0; i <= qtd -1; i++){
           var limitW = parseInt(Math.random() * beJS.canvas.w);
           var limitH = parseInt(Math.random() * beJS.canvas.h);
           beJS.dots.push(new beJS.fn.dots(get_color_random(),0.80,{x:limitH ,y: limitW }, 'circle'));
         }
+
         
-        var timeInterval = setInterval(() => {
-            beJS.canvas.canvasClear();
-            for (var i =  beJS.dots.length - 1; i >= 0; i--) beJS.dots[i].move();            
-        }, beJS.speed );
+        
+        // var timeInterval = setInterval(() => {
+        //     beJS.canvas.canvasClear();
+        //     for (var i =  beJS.dots.length - 1; i >= 0; i--) beJS.dots[i].move();            
+        // }, 1 );
+        var frame_start = function(){
+            window.requestAnimationFrame(() => {                    
+                beJS.canvas.canvasClear();
+                for (var i =  beJS.dots.length - 1; i >= 0; i--) beJS.dots[i].move(); 
+                frame_start();           
+            })
+        }
+
+        frame_start();
+
       }
+
+      
+
       beJS.fn.canvasInit(tag_id);
       beJS.fn.start();
     }
