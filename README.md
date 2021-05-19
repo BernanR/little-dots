@@ -1,7 +1,7 @@
 # My funny little dots
 Little dots project 
 
-This project went created with javascript and html5 canvas.
+This project was created with javascript and html5 canvas.
 
 ![Little dots](https://raw.githubusercontent.com/BernanR/little-dots/master/dots.png?raw=true "Little dots")
 
