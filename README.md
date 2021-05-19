@@ -1,4 +1,4 @@
-# My fun little dots
+# My funny little dots
 Little dots project 
 
 This project went created with javascript and html5 canvas.
