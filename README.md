@@ -10,4 +10,5 @@ Simple animation where you can see little dots being shown on screen moving in d
 
 To do this I just used javascript with HTML canvas.
 
-Check it out!
+[Check it out!](https://bernanr.github.io/little-dots/).
+
